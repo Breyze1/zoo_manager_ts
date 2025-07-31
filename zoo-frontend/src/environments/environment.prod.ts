@@ -1,0 +1,1 @@
+redirect_uri: 'http://localhost:4200';

@@ -1,0 +1,22 @@
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+.test-api-btn {
+  text-decoration: underline !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+  margin: 10px !important;
+  padding: 8px 16px !important;
+  border-radius: 4px !important;
+  background-color: #ff6b6b !important;
+  color: white !important;
+  font-weight: bold !important;
+  transition: all 0.3s ease !important;
+  
+  &:hover {
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4) !important;
+    transform: translateY(-2px) !important;
+  }
+}
+

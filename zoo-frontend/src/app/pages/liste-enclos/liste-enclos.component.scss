@@ -1,0 +1,126 @@
+.enclos-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+// Titre en blanc
+mat-card-title {
+  color: white !important;
+}
+
+// Titres et labels du formulaire "Nouvel Enclos" en noir
+.add-form mat-card-title,
+.add-form mat-form-field .mat-mdc-form-field-label,
+.add-form mat-label {
+  color: black !important;
+}
+
+// Espace autour du sous-titre
+mat-card-subtitle {
+  margin: 10px 0 !important;
+  padding: 5px 0 !important;
+}
+
+// Texte des zones de texte du formulaire "Nouvel Enclos" en noir
+.add-form mat-form-field input,
+.add-form mat-form-field textarea,
+.add-form mat-select {
+  color: black !important;
+}
+
+.enclos-card {
+  margin-bottom: 20px;
+}
+
+.filters-section {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filter-field {
+  min-width: 200px;
+}
+
+.add-form {
+  margin-bottom: 20px;
+}
+
+.form-card {
+  background-color: #f5f5f5;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.form-row mat-form-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 16px;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.enclos-table {
+  width: 100%;
+}
+
+.status-badge {
+  padding: 4px 8px;
+  border-radius: 4px;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.action-buttons button {
+  transition: transform 0.2s ease;
+}
+
+.action-buttons button:hover {
+  transform: scale(1.1);
+}
+
+.mat-mdc-row:hover {
+  background-color: transparent;
+}
+
+@media (max-width: 768px) {
+  .filters-section {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .filter-field {
+    min-width: auto;
+  }
+  
+  .form-row {
+    flex-direction: column;
+  }
+  
+  .form-row mat-form-field {
+    min-width: auto;
+  }
+} 

@@ -1,0 +1,158 @@
+<div class="enclos-container">
+  <mat-card class="enclos-card">
+    <mat-card-header>
+      <mat-card-title>Gestion des Enclos</mat-card-title>
+      <mat-card-subtitle>Liste et gestion des enclos du zoo</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- Filtres -->
+      <div class="filters-section">
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Filtrer par type</mat-label>
+          <mat-select [(ngModel)]="selectedType" (selectionChange)="filterByType()">
+            <mat-option value="">Tous les types</mat-option>
+            <mat-option value="savanna">Savane</mat-option>
+            <mat-option value="jungle">Jungle</mat-option>
+            <mat-option value="aquatic">Aquatique</mat-option>
+            <mat-option value="desert">Désert</mat-option>
+            <mat-option value="mountain">Montagne</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="filter-field">
+          <mat-label>Filtrer par statut</mat-label>
+          <mat-select [(ngModel)]="selectedStatus" (selectionChange)="filterByStatus()">
+            <mat-option value="">Tous les statuts</mat-option>
+            <mat-option value="active">Actif</mat-option>
+            <mat-option value="maintenance">Maintenance</mat-option>
+            <mat-option value="closed">Fermé</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <button 
+          *ngIf="hasRole('gardien')"
+          mat-raised-button 
+          color="primary" 
+          (click)="showAddForm = !showAddForm"
+        >
+          <mat-icon>add</mat-icon>
+          Ajouter un enclos
+        </button>
+      </div>
+
+      <!-- Formulaire d'ajout -->
+      <div *ngIf="showAddForm" class="add-form">
+        <mat-card class="form-card">
+          <mat-card-header>
+            <mat-card-title>Nouvel Enclos</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+            <div class="form-row">
+              <mat-form-field appearance="outline">
+                <mat-label>Nom de l'enclos</mat-label>
+                <input matInput [(ngModel)]="newEnclos.name" placeholder="Ex: Savane des Lions">
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Type</mat-label>
+                <mat-select [(ngModel)]="newEnclos.type">
+                  <mat-option value="savanna">Savane</mat-option>
+                  <mat-option value="jungle">Jungle</mat-option>
+                  <mat-option value="aquatic">Aquatique</mat-option>
+                  <mat-option value="desert">Désert</mat-option>
+                  <mat-option value="mountain">Montagne</mat-option>
+                </mat-select>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Capacité</mat-label>
+                <input matInput type="number" [(ngModel)]="newEnclos.capacity" min="1" max="100">
+              </mat-form-field>
+            </div>
+
+            <div class="form-actions">
+              <button mat-button (click)="showAddForm = false">Annuler</button>
+              <button mat-raised-button color="primary" (click)="addEnclos()">Ajouter</button>
+            </div>
+          </mat-card-content>
+        </mat-card>
+      </div>
+
+      <!-- Tableau des enclos -->
+      <div class="table-container">
+        <table mat-table [dataSource]="enclos" class="enclos-table">
+          <!-- ID Column -->
+          <ng-container matColumnDef="id">
+            <th mat-header-cell *matHeaderCellDef>ID</th>
+            <td mat-cell *matCellDef="let enclos">{{enclos.id}}</td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef>Nom</th>
+            <td mat-cell *matCellDef="let enclos">{{enclos.name}}</td>
+          </ng-container>
+
+          <!-- Type Column -->
+          <ng-container matColumnDef="type">
+            <th mat-header-cell *matHeaderCellDef>Type</th>
+            <td mat-cell *matCellDef="let enclos">{{enclos.type}}</td>
+          </ng-container>
+
+          <!-- Capacity Column -->
+          <ng-container matColumnDef="capacity">
+            <th mat-header-cell *matHeaderCellDef>Capacité</th>
+            <td mat-cell *matCellDef="let enclos">{{enclos.capacity}}</td>
+          </ng-container>
+
+          <!-- Current Occupancy Column -->
+          <ng-container matColumnDef="currentOccupancy">
+            <th mat-header-cell *matHeaderCellDef>Occupation</th>
+            <td mat-cell *matCellDef="let enclos">{{enclos.currentOccupancy}}</td>
+          </ng-container>
+
+          <!-- Status Column -->
+          <ng-container matColumnDef="status">
+            <th mat-header-cell *matHeaderCellDef>Statut</th>
+            <td mat-cell *matCellDef="let enclos">
+              <span class="status-badge" [style.background-color]="getStatusColor(enclos.status)">
+                {{enclos.status}}
+              </span>
+            </td>
+          </ng-container>
+
+          <!-- Actions Column -->
+          <ng-container matColumnDef="actions">
+            <th mat-header-cell *matHeaderCellDef>Actions</th>
+            <td mat-cell *matCellDef="let enclos">
+              <div class="action-buttons">
+                <button 
+                  *ngIf="hasRole('gardien')"
+                  mat-icon-button 
+                  color="primary" 
+                  (click)="openStatusDialog(enclos)" 
+                  matTooltip="Gérer l'enclos"
+                >
+                  <mat-icon>settings</mat-icon>
+                </button>
+                <button 
+                  *ngIf="hasRole('gardien')"
+                  mat-icon-button 
+                  color="warn" 
+                  (click)="deleteEnclos(enclos.id)" 
+                  matTooltip="Supprimer"
+                >
+                  <mat-icon>delete</mat-icon>
+                </button>
+              </div>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div> 

@@ -1,0 +1,52 @@
+<div class="enclos-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon>home</mat-icon>
+    Mettre {{ data.animalName }} en enclos
+    <div *ngIf="currentEnclos" class="current-enclos-subtitle">
+      <mat-icon class="small-icon">info</mat-icon>
+      Actuellement dans : {{ currentEnclos.name }} ({{ currentEnclos.type }})
+    </div>
+  </h2>
+
+  <mat-dialog-content>
+    <div *ngIf="loading" class="loading">
+      <mat-icon class="spinner">hourglass_empty</mat-icon>
+      Chargement des enclos disponibles...
+    </div>
+
+    <div *ngIf="!loading">
+      <p>Sélectionnez un enclos disponible pour {{ data.animalName }} :</p>
+      
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Enclos disponible</mat-label>
+        <mat-select [(ngModel)]="selectedEnclosId" required>
+          <mat-option *ngFor="let enclos of enclos" [value]="enclos.id">
+            {{ getEnclosDisplayName(enclos) }}
+          </mat-option>
+        </mat-select>
+        <mat-icon matSuffix>home</mat-icon>
+      </mat-form-field>
+
+      <div *ngIf="enclos.length === 0" class="no-enclos">
+        <mat-icon>warning</mat-icon>
+        <p>Aucun enclos disponible pour le moment.</p>
+      </div>
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()">
+      <mat-icon>cancel</mat-icon>
+      Annuler
+    </button>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      (click)="onConfirm()"
+      [disabled]="!selectedEnclosId || enclos.length === 0"
+    >
+      <mat-icon>check</mat-icon>
+      Confirmer
+    </button>
+  </mat-dialog-actions>
+</div> 

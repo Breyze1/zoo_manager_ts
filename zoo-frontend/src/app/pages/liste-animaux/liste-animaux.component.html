@@ -1,0 +1,129 @@
+<!-- zoo-frontend/src/app/liste-animaux/liste-animaux.component.html -->
+<div class="animaux-container">
+  <h1> Liste des animaux </h1>
+
+  <!-- Boutons d'action -->
+  <div class="actions-section">
+    <button 
+      *ngIf="hasRole('gardien')"
+      mat-raised-button 
+      color="primary" 
+      (click)="showAddForm = !showAddForm"
+    >
+      <mat-icon>add</mat-icon>
+      Ajouter un animal
+    </button>
+    
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Rechercher par nom</mat-label>
+      <input matInput [(ngModel)]="searchTerm" (input)="searchByName()" placeholder="Nom de l'animal">
+      <mat-icon matSuffix>search</mat-icon>
+    </mat-form-field>
+  </div>
+
+  <!-- Formulaire d'ajout -->
+  <div *ngIf="showAddForm" class="add-form">
+    <mat-card class="form-card">
+      <mat-card-header>
+        <mat-card-title>Nouvel Animal</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Nom de l'animal</mat-label>
+            <input matInput [(ngModel)]="newAnimal.name" placeholder="Ex: Simba">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Espèce</mat-label>
+            <input matInput [(ngModel)]="newAnimal.species" placeholder="Ex: Lion">
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Santé</mat-label>
+            <input matInput type="number" [(ngModel)]="newAnimal.health" min="0" max="100" placeholder="100">
+          </mat-form-field>
+        </div>
+
+        <div class="form-actions">
+          <button mat-button (click)="showAddForm = false">Annuler</button>
+          <button mat-raised-button color="primary" (click)="addAnimal()">Ajouter</button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <!-- Nom -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Nom</th>
+      <td mat-cell *matCellDef="let element">{{ element.name }}</td>
+    </ng-container>
+
+    <!-- Espèce -->
+    <ng-container matColumnDef="species">
+      <th mat-header-cell *matHeaderCellDef>Espèce</th>
+      <td mat-cell *matCellDef="let element">{{ element.species }}</td>
+    </ng-container>
+
+    <!-- Santé -->
+    <ng-container matColumnDef="health">
+      <th mat-header-cell *matHeaderCellDef>Santé</th>
+      <td mat-cell *matCellDef="let element">
+        {{ element.health ?? "Inconnu" }}
+      </td>
+    </ng-container>
+
+    <!-- Actions -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>Actions</th>
+      <td mat-cell *matCellDef="let element">
+        <!-- Bouton Détails -->
+        <button
+          mat-button
+          color="primary"
+          (click)="voirDetails(element)"
+          matTooltip="Voir les détails"
+        >
+          Détails
+        </button>
+        
+        <!-- Bouton Mettre en enclos - Visible uniquement pour les gardiens -->
+        <button
+          *ngIf="hasRole('gardien')"
+          mat-icon-button
+          color="primary"
+          (click)="mettreEnEnclos(element)"
+          matTooltip="Mettre en enclos"
+        >
+          <mat-icon>home</mat-icon>
+        </button>
+        
+        <!-- Bouton Soigner - Visible uniquement pour les vétérinaires -->
+        <button
+          *ngIf="hasRole('veterinaire')"
+          mat-icon-button
+          color="accent"
+          (click)="soignerAnimal(element.id)"
+          matTooltip="Soigner l'animal"
+        >
+          <mat-icon>healing</mat-icon>
+        </button>
+        
+        <!-- Bouton Supprimer - Visible uniquement pour les gardiens -->
+        <button
+          *ngIf="hasRole('gardien')"
+          mat-icon-button
+          color="warn"
+          (click)="deleteAnimal(element.id)"
+          matTooltip="Supprimer l'animal"
+        >
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>

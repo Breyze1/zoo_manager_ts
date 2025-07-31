@@ -1,0 +1,126 @@
+<div class="status-dialog">
+  <h2 mat-dialog-title>
+    <mat-icon>settings</mat-icon>
+    Gérer l'enclos
+  </h2>
+
+  <mat-dialog-content>
+    <div class="enclos-info">
+      <p><strong>Enclos :</strong> {{ data.enclosName }}</p>
+      <p><strong>Statut actuel :</strong> 
+        <span class="status-badge" [style.background-color]="getStatusColor(data.currentStatus)">
+          {{ data.currentStatus }}
+        </span>
+      </p>
+    </div>
+
+    <mat-tab-group>
+      <!-- Onglet Statut -->
+      <mat-tab label="Statut">
+        <div class="tab-content">
+          <div class="status-selection">
+            <p>Sélectionnez le nouveau statut :</p>
+            
+            <mat-form-field appearance="outline" class="full-width">
+              <mat-label>Nouveau statut</mat-label>
+              <mat-select [(ngModel)]="selectedStatus" required>
+                <mat-option value="active">
+                  <span class="status-option">
+                    <span class="status-dot" style="background-color: #4caf50;"></span>
+                    Actif
+                  </span>
+                </mat-option>
+                <mat-option value="maintenance">
+                  <span class="status-option">
+                    <span class="status-dot" style="background-color: #ff9800;"></span>
+                    Maintenance
+                  </span>
+                </mat-option>
+                <mat-option value="closed">
+                  <span class="status-option">
+                    <span class="status-dot" style="background-color: #f44336;"></span>
+                    Fermé
+                  </span>
+                </mat-option>
+              </mat-select>
+              <mat-icon matSuffix>settings</mat-icon>
+            </mat-form-field>
+          </div>
+        </div>
+      </mat-tab>
+
+      <!-- Onglet Animaux -->
+      <mat-tab label="Animaux">
+        <div class="tab-content">
+          <div class="animals-section">
+            <h3>Animaux présents dans cet enclos</h3>
+            
+            <div *ngIf="animalsLoading" class="loading">
+              <mat-icon class="spinner">hourglass_empty</mat-icon>
+              Chargement des animaux...
+            </div>
+
+            <div *ngIf="!animalsLoading && animals.length === 0" class="no-animals">
+              <mat-icon>pets</mat-icon>
+              <p>Aucun animal dans cet enclos</p>
+            </div>
+
+            <mat-list *ngIf="!animalsLoading && animals.length > 0" class="animals-list">
+              <mat-list-item *ngFor="let animal of animals" class="animal-item">
+                <div class="animal-info">
+                  <div class="animal-details">
+                    <h4 class="animal-name">{{ animal.name }}</h4>
+                    <p class="animal-species">{{ animal.species }}</p>
+                    <p class="animal-date">Arrivé le {{ animal.datePlacement | date:'dd/MM/yyyy' }}</p>
+                  </div>
+                  <div class="animal-actions">
+                    <div class="animal-health">
+                      <span class="health-badge" [style.background-color]="getHealthColor(animal.health)">
+                        Santé: {{ animal.health }}%
+                      </span>
+                    </div>
+                    <button 
+                      mat-icon-button 
+                      color="warn" 
+                      (click)="removeAnimalFromEnclos(animal.id)"
+                      matTooltip="Retirer de l'enclos"
+                      class="remove-button"
+                    >
+                      <mat-icon>remove_circle</mat-icon>
+                    </button>
+                  </div>
+                </div>
+              </mat-list-item>
+            </mat-list>
+
+            <div *ngIf="animalsToRemove.length > 0" class="pending-removals">
+              <h4>Animaux à retirer :</h4>
+              <p>{{ animalsToRemove.length }} animal(s) seront retiré(s) lors de la confirmation</p>
+            </div>
+          </div>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+
+    <div *ngIf="loading" class="loading">
+      <mat-icon class="spinner">hourglass_empty</mat-icon>
+      Modification en cours...
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button (click)="onCancel()" [disabled]="loading">
+      <mat-icon>cancel</mat-icon>
+      Annuler
+    </button>
+    <button 
+      mat-raised-button 
+      color="primary" 
+      (click)="onConfirm()"
+      [disabled]="loading"
+    >
+      <mat-icon>check</mat-icon>
+      Confirmer
+    </button>
+  </mat-dialog-actions>
+</div> 
