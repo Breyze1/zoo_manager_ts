@@ -274,9 +274,6 @@ Consultez le fichier `ROLES_AND_PERMISSIONS.md` pour les détails complets sur :
 - `npm run build` - Compilation pour production
 - `npm test` - Exécution des tests
 
-**Module TypeScript :**
-- `npm run zoo-ts` - Compilation et exécution
-
 ---
 
 **Note** : Ce projet est configuré pour un environnement de développement. Pour la production, configurez les variables d'environnement appropriées et désactivez `synchronize: true` dans TypeORM.
