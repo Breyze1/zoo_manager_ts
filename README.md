@@ -80,6 +80,7 @@ docker run --name zoo-postgres \
 ### 4. Configuration des variables d'environnement :
 
 Votre USERNAME et PASSWORD doivent être identiques à ceux utilisés lors de la création de votre base de donnée
+
 Le domain et clientID Auth0 se trouve dans les parametres de votre SPA créée sur Auth0
 
 Créez le fichier `zoo-backend/.env` :
