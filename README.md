@@ -147,14 +147,7 @@ npm start
 
 Le frontend sera accessible sur : http://localhost:4200
 
-### 3. Exécuter le module TypeScript
-
-```bash
-cd zoo-ts
-npm run zoo-ts
-```
-
-## Tests des fonctionnalités
+### 3. Tests des fonctionnalités
 
 ### Backend - Tests via Swagger
 
