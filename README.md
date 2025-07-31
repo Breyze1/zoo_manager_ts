@@ -97,7 +97,7 @@ AUTH0_AUDIENCE=http://localhost:3000
 PORT=3000
 ```
 
-Créez le fichier `zoo-frontend/environment.ts` :
+Créez le fichier `zoo-frontend/src/environments/environment.ts` :
 
 ```
 export const environment = {
